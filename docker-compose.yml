@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+
+  nagios:
+    build: .
+    volumes:
+      - ./conf.d:/usr/local/nagios/etc/conf.d/
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./run:/run
+    ports:
+      - "8005:80"
+    stdin_open: true
+    tty: true

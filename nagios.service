@@ -1,0 +1,19 @@
+[Unit]
+Description=Nagios Network Monitoring
+After=network.target
+Documentation=https://www.nagios.org/documentation/
+
+[Service]
+Type=forking
+User=nagios
+Group=nagios
+PIDFile=/usr/local/nagios/var/nagios.lock
+# Verify Nagios config before start as upstream suggested
+ExecStartPre=/usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+ExecStart=/usr/local/nagios/bin/nagios -d /usr/local/nagios/etc/nagios.cfg
+ExecStop=/bin/kill -TERM ${MAINPID}
+ExecStopPost=/usr/bin/rm -f /usr/local/nagios/var/rw/nagios.cmd
+ExecReload=/bin/kill -HUP ${MAINPID}
+
+[Install]
+WantedBy=multi-user.target
